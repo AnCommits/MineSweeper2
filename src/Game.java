@@ -1,5 +1,26 @@
 public class Game {
-    public static int open (int row, int column){
-        return 1000;
+    static int[][] b = {
+            {1, 9, 1, 1, 9, 1},
+            {2, 2, 2, 1, 2, 2},
+            {2, 9, 2, 0, 1, 9},
+            {2, 9, 2, 1, 2, 2},
+            {1, 1, 1, 1, 9, 1},
+            {0, 0, 0, 1, 1, 1}
+    };
+
+    public static int open(int row, int column) {
+        int r = b[row][column];
+        if (r == 9) System.exit(9);
+        return r;
     }
 }
+
+//            {0, 2, 9},
+//            {0, 2, 9}
+
+// {1, 9, 1, 1, 9, 1},
+// {2, 2, 2, 1, 2, 2},
+// {2, 9, 2, 0, 1, 9},
+// {2, 9, 2, 1, 2, 2},
+// {1, 1, 1, 1, 9, 1},
+// {0, 0, 0, 1, 1, 1}

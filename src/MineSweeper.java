@@ -16,7 +16,7 @@ class MineSweeper {
         this.board = new char[h][];
         for (int y = 0; y < h; y++) {
             this.board[y] = s[y].replaceAll(" ", "").toCharArray();
-            for (char c: this.board[y]) {
+            for (char c : this.board[y]) {
                 if (c == '?') numberOfQ++;
             }
         }
@@ -25,7 +25,6 @@ class MineSweeper {
 
     public String solve() {
         // Your code here...
-
         method0();
         method1();
         return boardToResult();
@@ -77,6 +76,16 @@ class MineSweeper {
                             numberOfQ--;
                         }
                     }
+                    if (numX == n - '0' && pointsQ.size() > 0) {
+                        while (pointsQ.size() > 0) {
+                            Point p = pointsQ.remove(pointsQ.size() - 1);
+                            int nq = Game.open(p.y, p.x);
+                            numberOfQ--;
+                            board[p.y][p.x] = (char) (nq + '0');
+                        }
+                    }
+
+
                 }
             }
         }
@@ -105,7 +114,7 @@ class MineSweeper {
             for (int x = 0; x < w; x++) {
                 sb.append(board[y][x]).append(" ");
             }
-            sb.replace(sb.length()-1, sb.length(), "\n");
+            sb.replace(sb.length() - 1, sb.length(), "\n");
         }
         return sb.substring(0, sb.length() - 1);
     }

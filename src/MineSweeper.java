@@ -7,10 +7,12 @@ class MineSweeper {
     private final int w;
     private final int nMines;
     private int numberOfQ = 0;
+    private int numOfClosedX;
 
     public MineSweeper(final String board, final int nMines) {
         // Your code here...
         this.nMines = nMines;
+        numOfClosedX = nMines;
         String[] s = board.split("\\n");
         h = s.length;
         this.board = new char[h][];
@@ -25,8 +27,14 @@ class MineSweeper {
 
     public String solve() {
         // Your code here...
-        method0();
-        method1();
+        int numOfQBefore;
+        do {
+            numOfQBefore = numberOfQ;
+            method0();
+            if (numOfClosedX == 0) return boardToString();
+            method1();
+            if (numOfClosedX == 0) return boardToString();
+        } while (numOfQBefore != numberOfQ);
         return boardToResult();
     }
 
@@ -43,15 +51,15 @@ class MineSweeper {
         do {
             point = pointQuestionNearZero();
             if (point != null) {
-                int n = Game.open(point.y, point.x);
+                board[point.y][point.x] = (char) (Game.open(point.y, point.x) + '0');
                 numberOfQ--;
-                board[point.y][point.x] = (char) (n + '0');
             }
         } while (point != null);
     }
 
     // search for a point marked ? next to a point marked with a digit
     // where sum of ? and x equals to the digit
+    // or count of x equals to the digit
     private void pointQuestionNearDigit() {
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
@@ -74,18 +82,17 @@ class MineSweeper {
                             Point p = pointsQ.remove(pointsQ.size() - 1);
                             board[p.y][p.x] = 'x';
                             numberOfQ--;
+                            numOfClosedX--;
                         }
                     }
-                    if (numX == n - '0' && pointsQ.size() > 0) {
+                    if (numX == n - '0') {
                         while (pointsQ.size() > 0) {
                             Point p = pointsQ.remove(pointsQ.size() - 1);
                             int nq = Game.open(p.y, p.x);
-                            numberOfQ--;
                             board[p.y][p.x] = (char) (nq + '0');
+                            numberOfQ--;
                         }
                     }
-
-
                 }
             }
         }
@@ -106,6 +113,18 @@ class MineSweeper {
             }
         }
         return null;
+    }
+
+    private String boardToString() {
+        if (numberOfQ > 0) {
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    if (board[y][x] == '?') Game.open(y, x);
+                }
+
+            }
+        }
+        return boardToResult();
     }
 
     private String boardToResult() {

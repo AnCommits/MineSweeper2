@@ -34,24 +34,32 @@ class MineSweeper {
             if (numOfClosedX == 0) return boardToString();
             method1();
             if (numOfClosedX == 0) return boardToString();
+            method2();
         } while (numOfQBefore != numberOfQ);
+        return boardToResult();
+//        return boardToString();
+    }
+
+    private void method2() {
         closedPoints = getClosedPoints();
         mines = initialMines();
-        int[] validMines = null;
+        boolean[] validPoints = new boolean[closedPoints.length];
         do {
-            fillBoardWithQ();
             fillBoardWithX();
             if (isValid()) {
-                if (validMines == null)
-                    validMines = mines.clone();
-                else return "?";
+                for (int i : mines) {
+                    validPoints[i] = true;
+                }
             }
+            fillBoardWithQ();
         } while (getNextMines());
-        if (validMines == null) return "?";
-        fillBoardWithQ();
-        mines = validMines.clone();
-        fillBoardWithX();
-        return boardToString();
+        for (int i = 0; i < validPoints.length; i++) {
+            if (!validPoints[i]) {
+                int y = closedPoints[i].y;
+                int x = closedPoints[i].x;
+                board[y][x] = (char) (Game.open(y, x) + '0');
+            }
+        }
     }
 
     private boolean isValid() {
@@ -62,7 +70,8 @@ class MineSweeper {
                         int numX = 0;
                         for (int yy = y - 1; yy <= y + 1; yy++) {
                             for (int xx = x - 1; xx <= x + 1; xx++) {
-                                if (yy >= 0 && yy < h && xx >= 0 && xx < w && (yy != y || xx != x) && board[yy][xx] == 'x') numX++;
+                                if (yy >= 0 && yy < h && xx >= 0 && xx < w && (yy != y || xx != x) && board[yy][xx] == 'x')
+                                    numX++;
                             }
                         }
                         if (board[y][x] != numX + '0') return false;
@@ -74,7 +83,8 @@ class MineSweeper {
     }
 
     private void fillBoardWithQ() {
-        for (Point p : closedPoints) {
+        for (int i : mines) {
+            Point p = closedPoints[i];
             board[p.y][p.x] = '?';
         }
     }

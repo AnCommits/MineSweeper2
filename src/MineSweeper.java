@@ -36,8 +36,8 @@ class MineSweeper {
             if (numOfClosedX == 0) return boardToString();
             method2();
         } while (numOfQBefore != numberOfQ);
+        if (numberOfQ != 0) return "?";
         return boardToResult();
-//        return boardToString();
     }
 
     private void method2() {
